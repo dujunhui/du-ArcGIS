@@ -36,18 +36,25 @@ require(["esri/map",
     ];
     //改变参数设置地图范围
     var ext = new Extent({xmin:119.6,ymin:36.6,xmax:122.2,ymax:37.9,spatialReference:{wkid:4326}});
+
+
     //初始化map
     map = new Map("mapDiv", {
         extent:ext,
         lods: lods,
         logo: false
-    })
+    });
 
     //加载底图服务层
     serverBgLayer = new ArcGISDynamicMapServiceLayer(wmsurl, {
         opacity: 0.8
     });
     map.addLayer(serverBgLayer);
+
+    dojo.connect(map, "onLoad", function(){
+        map.disableScrollWheelZoom();//禁止滚轮缩放
+        map.disableDoubleClickZoom(true);//禁止双击缩放
+    });
 
 });
 
