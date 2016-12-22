@@ -34,6 +34,7 @@ require(["esri/map",
         { "level": 10, "resolution": 0.000010728836059572125, "scale": 4508.935440960693 },
         { "level": 11, "resolution": 0.0000053644180297860626, "scale": 2254.4677204803465 }
     ];
+
     //改变参数设置地图范围
     var ext = new Extent({xmin:119.6,ymin:36.6,xmax:122.2,ymax:37.9,spatialReference:{wkid:4326}});
 
@@ -51,7 +52,7 @@ require(["esri/map",
             opacity: 0.8
         });
         map.addLayer(serverBgLayer);
-
+        map.on("extent-change", changeScale);
         dojo.connect(map, "onLoad", dxInit);
 
 
@@ -64,6 +65,12 @@ function dxInit(){
     map.disableDoubleClickZoom(true);//禁止双击缩放
 }
 
-//basemap: "topo",
-//extent:ext,
-//lods: lods,
+//打印lods相关信息
+function changeScale(evt){
+    var lod = {
+        "level":evt.lod.level,
+        "resolution":evt.lod.resolution,
+        "scale":evt.lod.scale
+    };
+    console.log(JSON.stringify(lod));
+}

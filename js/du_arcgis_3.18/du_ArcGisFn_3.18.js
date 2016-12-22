@@ -1,5 +1,5 @@
 var getPoint,getPointGraphic,getSVGGraphic,getTextGraphic,getImgGraphic,
-    getPolygon,getPolygonGraphic,setMapCenter,setMapCenterAndZoom,showInfoWindow;
+    getPolygon,getPolygonGraphic,getPolyline,getPolylineGraphic,setMapCenter,setMapCenterAndZoom,showInfoWindow;
 
 require(["esri/map","esri/graphic","esri/InfoTemplate",
         "esri/geometry/Point",
@@ -33,18 +33,15 @@ require(["esri/map","esri/graphic","esri/InfoTemplate",
             var simpleLineSymbol = new SimpleLineSymbol(SimpleLineSymbol[obj["line"]["style"]], new dojo.Color(obj["line"]["color"]), obj["line"]["size"]);//边线
             var simpleMarkerSymbol =  new SimpleMarkerSymbol(SimpleMarkerSymbol[obj["fill"]["style"]], obj["fill"]["size"], simpleLineSymbol, new dojo.Color(obj["fill"]["color"])); //圆点标记样式
             simpleMarkerSymbol.setOffset(obj["offset"][0],obj["offset"][1]);
-
-            var point = getPoint(obj["point"][0],obj["point"][1]);
-            //var infoTemplate = new InfoTemplate("Vernal Pool Locations ${Plant}","Latitude: ${Ycoord} <br/>Longitude: ${Xcoord} <br/>Plant Name:${Plant}");
+            //新建弹窗
             var infoTemplate = new InfoTemplate();
             infoTemplate.setTitle("Vernal Pool Locations ${key1}");
             infoTemplate.setContent("<b>key1 </b>${key2}<br/>" +
                 "<b>2007 density: </b>${key3}<br/>" +
                 "<b>2000: </b>${key3}<br/>" +
                 "<b>2000 density: </b>${key3}");
-
+            //返回graphic
             var graphic = new Graphic(point, simpleMarkerSymbol, obj["attribute"], infoTemplate);
-            //graphic.setAttributes(obj["attribute"]);
             return graphic;
         }
         /*
@@ -56,8 +53,7 @@ require(["esri/map","esri/graphic","esri/InfoTemplate",
             simpleMarkerSymbol.setPath(obj["svg"]["path"]);
             simpleMarkerSymbol.setOffset(obj["offset"][0],obj["offset"][1]);
             var point = getPoint(obj["point"][0],obj["point"][1]);
-            var graphic = new Graphic(point, simpleMarkerSymbol);
-            graphic.setAttributes(obj["attribute"]);
+            var graphic = new Graphic(point, simpleMarkerSymbol, obj["attribute"]);
             return graphic;
         }
 
@@ -77,8 +73,7 @@ require(["esri/map","esri/graphic","esri/InfoTemplate",
             textSym.setOffset(obj["offset"][0], obj["offset"][1]);
             //返回graphic
             var point = getPoint(obj["point"][0],obj["point"][1]);
-            var graphic = new Graphic(point, textSym);
-            graphic.setAttributes(obj["attribute"]);
+            var graphic = new Graphic(point, textSym, obj["attribute"]);
             return graphic;
         }
 
@@ -95,14 +90,9 @@ require(["esri/map","esri/graphic","esri/InfoTemplate",
             }
             //设置图片偏移量
             pictureMarkerSymbol.setOffset(obj["offset"][0],obj["offset"][1]+top);
-
-            //var attr = {"Xcoord":point.x,"Ycoord":point.y,"Plant":"Mesa Mint"};
-            //var infoTemplate = new esri.InfoTemplate("Vernal Pool Locations","Longitude: ${Xcoord} <br/> Latitude: ${Ycoord} <br/>Plant Name:${Plant}");
-
             //返回graphic
             var point = getPoint(obj["point"][0],obj["point"][1]);
-            var graphic = new Graphic(point, pictureMarkerSymbol);
-            graphic.setAttributes(obj["attribute"]);
+            var graphic = new Graphic(point, pictureMarkerSymbol, obj["attribute"]);
             return graphic;
         }
 
